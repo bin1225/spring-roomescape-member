@@ -19,7 +19,6 @@ import roomescape.theme.controller.dto.ThemeRankResponse;
 import roomescape.theme.controller.dto.ThemeResponse;
 import roomescape.theme.service.ThemeService;
 import roomescape.time.controller.dto.request.GetAvailableTimesRequest;
-import roomescape.time.controller.dto.response.AvailableReservationTimeResponse;
 import roomescape.time.controller.dto.response.ThemeReservationTimesResponse;
 
 @RestController
@@ -44,14 +43,14 @@ public class ThemeController {
 
     @PostMapping
     public ResponseEntity<ThemeResponse> createTheme(@Valid @RequestBody CreateThemeRequest createThemeRequest) {
-        ThemeResponse themeResponse = themeService.createTheme(createThemeRequest);
+        ThemeResponse themeResponse = themeService.addTheme(createThemeRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(themeResponse);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTheme(@PathVariable Long id) {
-        themeService.deleteTheme(id);
+        themeService.removeRegisteredTheme(id);
         return ResponseEntity.noContent().build();
     }
 
@@ -61,10 +60,7 @@ public class ThemeController {
             @RequestParam LocalDate date,
             @RequestParam(required = false) Boolean available
     ) {
-        List<AvailableReservationTimeResponse> allAvailableTimes = themeService.findAllAvailableTimes(
-                GetAvailableTimesRequest.of(id, date, available)
-        );
-        ThemeResponse theme = themeService.findTheme(id);
-        return ResponseEntity.ok(ThemeReservationTimesResponse.from(theme, allAvailableTimes));
+        return ResponseEntity.ok(themeService.findAllAvailableTimes(
+                GetAvailableTimesRequest.of(id, date, available)));
     }
 }

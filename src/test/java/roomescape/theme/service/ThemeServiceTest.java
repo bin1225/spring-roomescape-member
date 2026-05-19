@@ -2,6 +2,7 @@ package roomescape.theme.service;
 
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
@@ -74,9 +75,12 @@ class ThemeServiceTest {
         when(reservationTimeRepository.findIdByCondition(any()))
                 .thenReturn(List.of(timeA.getId(), timeB.getId()));
 
+        when(themeRepository.findById(anyLong()))
+                .thenReturn(ThemeFixture.createDefault());
+
         //when
-        List<LocalTime> allAvailableTimes = themeService.findAllAvailableTimes(request)
-                .stream().map(AvailableReservationTimeResponse::startAt)
+        List<LocalTime> allAvailableTimes = themeService.findAllAvailableTimes(request).availableTimes().stream()
+                .map(AvailableReservationTimeResponse::startAt)
                 .toList();
 
         //then
