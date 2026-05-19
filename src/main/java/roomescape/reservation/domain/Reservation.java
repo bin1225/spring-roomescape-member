@@ -20,7 +20,7 @@ public class Reservation {
     @EqualsAndHashCode.Include
     private final Long id;
     private final String name;
-    private final LocalDate date;
+    private final ReservationDateTime dateTime;
     private final boolean cancel;
     private final ReservationTime time;
     private final Theme theme;
@@ -30,7 +30,7 @@ public class Reservation {
         validateName(name);
         this.id = id;
         this.name = name;
-        this.date = date;
+        this.dateTime = ReservationDateTime.of(date, time.getStartAt());
         this.cancel = cancel;
         this.time = time;
         this.theme = theme;
@@ -57,7 +57,7 @@ public class Reservation {
     }
 
     public LocalDateTime getReservationDateTime() {
-        return LocalDateTime.of(date, time.getStartAt());
+        return dateTime.value();
     }
 
     public boolean isFutureOrPresent(LocalDateTime compareDateTime) {
@@ -73,17 +73,24 @@ public class Reservation {
     }
 
     public Reservation reschedule(LocalDate date, ReservationTime time) {
+        LocalDate updatedDate = Objects.requireNonNullElse(date, dateTime.getDate());
+        ReservationTime updatedTime = Objects.requireNonNullElse(time, this.time);
+
         return new Reservation(
                 id,
                 name,
-                Objects.requireNonNullElse(date, this.date),
+                updatedDate,
                 cancel,
-                Objects.requireNonNullElse(time, this.time),
+                updatedTime,
                 theme
         );
     }
 
     public boolean isCreatedBefore(LocalDateTime dateTime) {
         return getReservationDateTime().isBefore(dateTime);
+    }
+
+    public LocalDate getDate() {
+        return dateTime.getDate();
     }
 }
