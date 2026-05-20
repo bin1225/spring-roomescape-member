@@ -9,6 +9,6 @@ public class ReservationTimeMapper {
     }
 
     public static ReservationTime toReservationTime(ReservationTimeEntity from) {
-        return new ReservationTime(from.getId(), from.getStartAt());
+        return ReservationTime.createWithId(from.getId(), from.getStartAt());
     }
 }

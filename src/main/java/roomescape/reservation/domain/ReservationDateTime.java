@@ -14,4 +14,8 @@ public record ReservationDateTime(
     public LocalDate getDate() {
         return value.toLocalDate();
     }
+
+    public boolean isCreatedBefore(LocalDateTime dateTime) {
+        return value.isBefore(dateTime);
+    }
 }

@@ -15,16 +15,29 @@ public class Theme {
     private final String description;
     private final String imageUrl;
 
-    public Theme(Long id, String name, String description, String imageUrl) {
-        validateId(id);
+    private Theme(Long id, String name, String description, String imageUrl) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.imageUrl = imageUrl;
     }
 
-    private void validateId(Long id) {
-        if(Objects.isNull(id) || id <= 0) {
+    public static Theme create(String name, String description, String imageUrl) {
+        return new Theme(null, name, description, imageUrl);
+    }
+
+    public static Theme createWithId(Long id, String name, String description, String imageUrl) {
+        validateId(id);
+        return new Theme(id, name, description, imageUrl);
+    }
+
+    public Theme withId(Long id) {
+        validateId(id);
+        return new Theme(id, name, description, imageUrl);
+    }
+
+    private static void validateId(Long id) {
+        if (Objects.isNull(id) || id <= 0) {
             throw new InvalidIdException(id);
         }
     }

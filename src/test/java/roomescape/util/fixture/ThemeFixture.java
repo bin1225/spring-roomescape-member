@@ -8,10 +8,10 @@ public class ThemeFixture {
     private static final AtomicLong idSequence = new AtomicLong(1L);
 
     public static Theme createDefault() {
-        return new Theme(idSequence.getAndIncrement(), "default", "default", "/image/...");
+        return Theme.createWithId(idSequence.getAndIncrement(), "default", "default", "/image/...");
     }
 
     public static Theme createByIdAndName(Long id, String name) {
-        return new Theme(id, name, "default", "/image/...");
+        return Theme.createWithId(id, name, "default", "/image/...");
     }
 }

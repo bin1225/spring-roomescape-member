@@ -9,10 +9,10 @@ public class ReservationTimeFixture {
     private static final AtomicLong idSequence = new AtomicLong(1L);
 
     public static ReservationTime create(LocalTime time) {
-        return new ReservationTime(idSequence.getAndIncrement(), time);
+        return ReservationTime.createWithId(idSequence.getAndIncrement(), time);
     }
 
     public static ReservationTime createWithId(Long id, LocalTime time) {
-        return new ReservationTime(id, time);
+        return ReservationTime.createWithId(id, time);
     }
 }

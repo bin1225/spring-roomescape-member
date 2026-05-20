@@ -13,7 +13,7 @@ class ThemeTest {
     @ValueSource(longs = {-1L, 0L})
     void 식별자가_0보다_작은_경우_예외가_발생한다(Long id) {
         // when & then
-        Assertions.assertThatThrownBy(() -> new Theme(id, "hello", "world", "/resources/image/..."))
+        Assertions.assertThatThrownBy(() -> Theme.createWithId(id, "hello", "world", "/resources/image/..."))
                 .isInstanceOf(InvalidIdException.class);
     }
 
@@ -23,8 +23,17 @@ class ThemeTest {
         Long id = null;
 
         // when & then
-        Assertions.assertThatThrownBy(() -> new Theme(id, "hello", "world", "/resources/image/..."))
+        Assertions.assertThatThrownBy(() -> Theme.createWithId(id, "hello", "world", "/resources/image/..."))
                 .isInstanceOf(InvalidIdException.class);
+    }
+
+    @Test
+    void 식별자가_없는_상태의_객체를_생성한다() {
+        // when
+        Theme theme = Theme.create("hello", "world", "/resources/image/...");
+
+        // then
+        Assertions.assertThat(theme.getId()).isNull();
     }
 
     @Test

@@ -14,14 +14,27 @@ public class ReservationTime {
     private final Long id;
     private final LocalTime startAt;
 
-    public ReservationTime(Long id, LocalTime startAt) {
-        validateId(id);
+    private ReservationTime(Long id, LocalTime startAt) {
         this.id = id;
         this.startAt = startAt;
     }
 
-    private void validateId(Long id) {
-        if(Objects.isNull(id) || id <= 0) {
+    public static ReservationTime create(LocalTime startAt) {
+        return new ReservationTime(null, startAt);
+    }
+
+    public static ReservationTime createWithId(Long id, LocalTime startAt) {
+        validateId(id);
+        return new ReservationTime(id, startAt);
+    }
+
+    public ReservationTime withId(Long id) {
+        validateId(id);
+        return new ReservationTime(id, startAt);
+    }
+
+    private static void validateId(Long id) {
+        if (Objects.isNull(id) || id <= 0) {
             throw new InvalidIdException(id);
         }
     }

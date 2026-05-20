@@ -28,8 +28,8 @@ class ReservationTest {
         Theme themeB = ThemeFixture.createByIdAndName(2L, "B");
 
         // when
-        Reservation reservationA = new Reservation(1L, "name1", LocalDate.of(2026, 1, 1), reservationTimeA, themeA);
-        Reservation reservationB = new Reservation(1L, "name2", LocalDate.of(2026, 1, 2), reservationTimeB, themeB);
+        Reservation reservationA = Reservation.createWithId(1L, "name1", LocalDate.of(2026, 1, 1), false, reservationTimeA, themeA);
+        Reservation reservationB = Reservation.createWithId(1L, "name2", LocalDate.of(2026, 1, 2), false, reservationTimeB, themeB);
 
         //then
         Assertions.assertThat(reservationA).isEqualTo(reservationB);
@@ -43,7 +43,7 @@ class ReservationTest {
         Theme theme = ThemeFixture.createDefault();
 
         //when & then
-        Assertions.assertThatThrownBy(() -> new Reservation(1L, name, LocalDate.now(), reservationTime, theme))
+        Assertions.assertThatThrownBy(() -> Reservation.create(name, LocalDate.now(), reservationTime, theme))
                 .isInstanceOf(InvalidNameException.class);
     }
 
@@ -55,7 +55,7 @@ class ReservationTest {
         Theme theme = ThemeFixture.createDefault();
 
         //when & then
-        Assertions.assertThatThrownBy(() -> new Reservation(1L, name, LocalDate.now(), reservationTime, theme))
+        Assertions.assertThatThrownBy(() -> Reservation.create(name, LocalDate.now(), reservationTime, theme))
                 .isInstanceOf(InvalidNameLengthException.class);
     }
 
@@ -67,7 +67,7 @@ class ReservationTest {
         Theme theme = ThemeFixture.createDefault();
 
         // when & then
-        Assertions.assertThatThrownBy(() -> new Reservation(id, "userA", LocalDate.now(), reservationTime, theme))
+        Assertions.assertThatThrownBy(() -> Reservation.createWithId(id, "userA", LocalDate.now(), false, reservationTime, theme))
                 .isInstanceOf(InvalidIdException.class);
     }
 
@@ -78,7 +78,7 @@ class ReservationTest {
         Theme theme = ThemeFixture.createDefault();
 
         // when & then
-        Assertions.assertThatThrownBy(() -> new Reservation(null, "userA", LocalDate.now(), reservationTime, theme))
+        Assertions.assertThatThrownBy(() -> Reservation.createWithId(null, "userA", LocalDate.now(), false, reservationTime, theme))
                 .isInstanceOf(InvalidIdException.class);
     }
 
@@ -91,7 +91,7 @@ class ReservationTest {
         ReservationTime now = ReservationTimeFixture.create(LocalTime.now());
         ReservationTime afterOneHour = ReservationTimeFixture.create(LocalTime.now().plusHours(1L));
 
-        Reservation reservation = new Reservation(1L, "userA", today,
+        Reservation reservation = Reservation.create("userA", today,
                 now,
                 ThemeFixture.createDefault());
 
@@ -112,7 +112,7 @@ class ReservationTest {
         ReservationTime now = ReservationTimeFixture.create(LocalTime.now());
         ReservationTime afterOneHour = ReservationTimeFixture.create(LocalTime.now().plusHours(1L));
 
-        Reservation reservation = new Reservation(1L, "userA", today,
+        Reservation reservation = Reservation.create("userA", today,
                 now,
                 ThemeFixture.createDefault());
 
@@ -133,7 +133,7 @@ class ReservationTest {
         LocalDate tomorrow = LocalDate.now().plusDays(1);
         ReservationTime now = ReservationTimeFixture.create(LocalTime.now());
 
-        Reservation reservation = new Reservation(1L, "userA", today,
+        Reservation reservation = Reservation.create("userA", today,
                 now,
                 ThemeFixture.createDefault());
 

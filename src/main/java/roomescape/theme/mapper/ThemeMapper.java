@@ -9,7 +9,7 @@ public class ThemeMapper {
     }
 
     public static Theme toTheme(ThemeEntity themeEntity) {
-        return new Theme(themeEntity.getId(), themeEntity.getName(), themeEntity.getDescription(),
+        return Theme.createWithId(themeEntity.getId(), themeEntity.getName(), themeEntity.getDescription(),
                 themeEntity.getImageUrl());
     }
 }

@@ -25,19 +25,37 @@ public class Reservation {
     private final ReservationTime time;
     private final Theme theme;
 
-    public Reservation(Long id, String name, LocalDate date, boolean cancel, ReservationTime time, Theme theme) {
-        validateId(id);
+    private Reservation(Long id, String name, ReservationDateTime dateTime, boolean cancel, ReservationTime time,
+                        Theme theme) {
         validateName(name);
         this.id = id;
         this.name = name;
-        this.dateTime = ReservationDateTime.of(date, time.getStartAt());
+        this.dateTime = dateTime;
         this.cancel = cancel;
         this.time = time;
         this.theme = theme;
     }
 
-    public Reservation(Long id, String name, LocalDate date, ReservationTime time, Theme theme) {
+    private Reservation(Long id, String name, LocalDate date, boolean cancel, ReservationTime time, Theme theme) {
+        this(id, name, ReservationDateTime.of(date, time.getStartAt()), cancel, time, theme);
+    }
+
+    private Reservation(Long id, String name, LocalDate date, ReservationTime time, Theme theme) {
         this(id, name, date, false, time, theme);
+    }
+
+    public static Reservation create(String name, LocalDate date, ReservationTime time, Theme theme) {
+        return new Reservation(null, name, date, time, theme);
+    }
+
+    public static Reservation createWithId(Long id, String name, LocalDate date, boolean isCancelled, ReservationTime time, Theme theme) {
+        validateId(id);
+        return new Reservation(id, name, date, isCancelled, time, theme);
+    }
+
+    public Reservation withId(Long id) {
+        validateId(id);
+        return new Reservation(id, name, dateTime, cancel, time, theme);
     }
 
     private void validateName(String name) {
@@ -50,7 +68,7 @@ public class Reservation {
         }
     }
 
-    private void validateId(Long id) {
+    private static void validateId(Long id) {
         if (Objects.isNull(id) || id <= 0) {
             throw new InvalidIdException(id);
         }
@@ -86,8 +104,8 @@ public class Reservation {
         );
     }
 
-    public boolean isCreatedBefore(LocalDateTime dateTime) {
-        return getReservationDateTime().isBefore(dateTime);
+    public boolean isCreatedBefore(LocalDateTime compare) {
+        return dateTime.isCreatedBefore(compare);
     }
 
     public LocalDate getDate() {
